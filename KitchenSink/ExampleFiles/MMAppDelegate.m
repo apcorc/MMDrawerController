@@ -59,8 +59,23 @@
          }
      }];
     
+    
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [self.window setRootViewController:drawerController];
+    
+    /*
+     * Changes start here
+     */
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:drawerController];
+    [navController setNavigationBarHidden:YES];
+    
+    [self.window setRootViewController:navController];
+    
+    /*
+     * Changes end here
+     */
+    
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

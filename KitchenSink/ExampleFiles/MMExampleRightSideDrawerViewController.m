@@ -49,41 +49,45 @@
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     
-    if(section == MMDrawerSectionDrawerWidth)
-        return @"Right Drawer Width";
-    else
-        return [super tableView:tableView titleForHeaderInSection:section];
+    return @"";
 }
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell * cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    if(indexPath.section == MMDrawerSectionDrawerWidth){
-        CGFloat width = [self.drawerWidths[indexPath.row] intValue];
-        CGFloat drawerWidth = self.mm_drawerController.maximumRightDrawerWidth;
-        if(drawerWidth == width)
-            [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-        else
-            [cell setAccessoryType:UITableViewCellAccessoryNone];
-        [cell.textLabel setText:[NSString stringWithFormat:@"Width %d",[self.drawerWidths[indexPath.row] intValue]]];
-    }
+    
+    cell.textLabel.text = @"Push VC";
     
     return cell;
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    return 1;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if(indexPath.section == MMDrawerSectionDrawerWidth){
-        [self.mm_drawerController
-         setMaximumRightDrawerWidth:[self.drawerWidths[indexPath.row] floatValue]
-         animated:YES
-         completion:^(BOOL finished) {
-             [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-             [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-         }];
-    }
-    else {
-        [super tableView:tableView didSelectRowAtIndexPath:indexPath];
-    }
+    UIViewController *viewController = [[UIViewController alloc] init];
+    [self.navigationController pushViewController:viewController animated:YES];
+    
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setFrame:CGRectMake(0, 0, 320, 50)];
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [viewController.view addSubview:backButton];
+    //[viewController release];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+-(void)back{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
